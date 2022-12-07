@@ -25,7 +25,11 @@ class WordInfo:
                  a_unit_split,
                  b_unit_split,
                  word_structure,
-                 synonym_group_ids):
+                 synonym_group_ids,
+                 lex_type=None,
+                 lex_id=0,
+                 word_id=None,
+                 dictionary_form_lex_id=0):
         self.surface = surface
         self.head_word_length = head_word_length
         self.pos_id = pos_id
@@ -37,6 +41,10 @@ class WordInfo:
         self.b_unit_split = b_unit_split
         self.word_structure = word_structure
         self.synonym_group_ids = synonym_group_ids
+        self.word_id = word_id
+        self.lex_id = lex_id
+        self.lex_type = lex_type or 'oov'
+        self.dictionary_form_lex_id = dictionary_form_lex_id
 
     def length(self):
         return self.head_word_length

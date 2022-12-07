@@ -46,6 +46,19 @@ class LexiconSet(Lexicon):
             for pair in pairs:
                 yield (self.build_word_id(dict_id, pair[0]), pair[1])
 
+    def strict_lookup(self, text: str, offset: int) -> Lexicon.Itr:
+        if len(self.lexicons) == 1:
+            return self.lexicons[0].strict_lookup(text, offset)
+        return self.__strict_lookup(text, offset)
+
+    def __strict_lookup(self, text: str, offset: int) -> Lexicon.Itr:
+        indices = list(range(len(self.lexicons)))[1:] + [0]
+        for dict_id in indices:
+            pairs = self.lexicons[dict_id].strict_lookup(text, offset)
+            for pair in pairs:
+                yield (self.build_word_id(dict_id, pair[0]), pair[1])
+
+
     def get_left_id(self, word_id: int) -> int:
         return self.lexicons[self.get_dictionary_id(word_id)]\
             .get_left_id(self.get_word_id1(word_id))
@@ -61,13 +74,39 @@ class LexiconSet(Lexicon):
     @lru_cache(1024)
     def get_word_info(self, word_id: int) -> 'WordInfo':  # noqa: F821
         dic_id = self.get_dictionary_id(word_id)
-        winfo = self.lexicons[dic_id].get_word_info(self.get_word_id1(word_id))
+
+        if dic_id > 0:
+            """
+            if this word is from a custom dictionary then we need a reference to the general dictionary
+            in case the word's dictionary version is from the general dictionary
+            """
+            general_lex = self.lexicons[0]
+        else:
+            general_lex = None
+
+        winfo = self.lexicons[dic_id].get_word_info(self.get_word_id1(word_id), general_lex=general_lex)
+        assert hasattr(winfo, 'word_id')
+        # winfo.word_id = word_id
+        winfo.lex_id = dic_id
         pos_id = winfo.pos_id
         if dic_id > 0 and pos_id >= self.pos_offsets[1]:  # user defined part-of-speech
             winfo.pos_id = winfo.pos_id - self.pos_offsets[1] + self.pos_offsets[dic_id]
         winfo.a_unit_split = self.convert_split(winfo.a_unit_split, dic_id)
         winfo.b_unit_split = self.convert_split(winfo.b_unit_split, dic_id)
         winfo.word_structure = self.convert_split(winfo.word_structure, dic_id)
+
+        if winfo.lex_id == 2:
+            winfo.lex_type = 'character'
+        elif winfo.lex_id == 3:
+            winfo.lex_type = 'animetitle'
+        elif winfo.lex_id == 4:
+            winfo.lex_type = 'anime'
+        # else:
+        #     raise Exception(f"lex id {winfo.lex_id} not supported")
+
+        if winfo.lex_id == 1 and winfo.word_id < 10**9:
+            winfo.word_id += 10**9
+
         return winfo
 
     def get_dictionary_id(self, word_id: int) -> int:
