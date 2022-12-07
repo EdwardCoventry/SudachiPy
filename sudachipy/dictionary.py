@@ -28,7 +28,7 @@ class UndefinedDictionaryError(Exception):
 
 class Dictionary:
 
-    def __init__(self, config_path=None, resource_dir=None, dict_type=None):
+    def __init__(self, config_path=None, resource_dir=None, dict_type=None, num_rewrite_plugin=None):
         config.settings.set_up(config_path, resource_dir, dict_type)
         self.grammar = None
         self.lexicon = None
@@ -51,6 +51,7 @@ class Dictionary:
         for p in self.input_text_plugins:
             p.set_up()
 
+        # if not num_rewrite_plugin is False:
         self.oov_provider_plugins = get_oov_plugins()
         if not self.oov_provider_plugins:
             raise AttributeError("no OOV provider")

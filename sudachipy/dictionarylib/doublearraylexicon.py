@@ -62,6 +62,15 @@ class DoubleArrayLexicon(Lexicon):
             for word_id in word_ids:
                 yield (word_id, length)
 
+    def strict_lookup(self, text: bytes, offset: int) -> Lexicon.Itr:
+        key = text[offset:]
+        result = self.trie.exact_match_search(key, length=len(key))
+        for index, length in [result]:
+            word_ids = self.word_id_table.get(index)
+            length += offset
+            for word_id in word_ids:
+                yield (word_id, length)
+
     def get_left_id(self, word_id: int) -> int:
         return self.word_params.get_left_id(word_id)
 
@@ -71,8 +80,8 @@ class DoubleArrayLexicon(Lexicon):
     def get_cost(self, word_id: int) -> int:
         return self.word_params.get_cost(word_id)
 
-    def get_word_info(self, word_id: int) -> 'WordInfo':  # noqa: F821
-        return self.word_infos.get_word_info(word_id)
+    def get_word_info(self, word_id: int, general_lex=None, _offset=None) -> 'WordInfo':  # noqa: F821
+        return self.word_infos.get_word_info(word_id, general_lex, _offset=_offset)
 
     def size(self) -> int:
         return self.word_params.size

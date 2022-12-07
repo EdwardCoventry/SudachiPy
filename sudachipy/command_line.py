@@ -111,8 +111,10 @@ def _command_user_build(args, print_usage):
     with open(args.out_file, 'wb') as wf:
         wf.write(header.to_bytes())
         builder = UserDictionaryBuilder(dict_.grammar, dict_.lexicon)
-        builder.build(args.in_files, None, wf)
-
+        try:
+            builder.build(args.in_files, None, wf)
+        except ValueError as e:
+            raise e
 
 def _command_build(args, print_usage):
     _matrix_file_checker(args, print_usage)
