@@ -46,7 +46,7 @@ class WordInfoList(object):
         word_structure = self.buffer_to_int_array()
 
         if word_id > 0:
-            lex_id, word_id = divmod(word_id, 1000000000)
+            lex_id, word_id = divmod(word_id, 100000000)
         else:
             lex_id = 0
 
@@ -67,7 +67,7 @@ class WordInfoList(object):
             synonym_gids = self.buffer_to_int_array()
 
         if dictionary_form_word_id > 0:
-            dictionary_form_dictionary_number, dictionary_form_word_id = divmod(dictionary_form_word_id, 1000000000)
+            dictionary_form_dictionary_number, dictionary_form_word_id = divmod(dictionary_form_word_id, 100000000)
         else:
             dictionary_form_dictionary_number = 0
 
@@ -101,7 +101,7 @@ class WordInfoList(object):
 
         self.bytes.seek(orig_pos)
 
-        dictionary_form_word_id = dictionary_form_word_id + dictionary_form_dictionary_number*1000000000
+        dictionary_form_word_id = dictionary_form_word_id + dictionary_form_dictionary_number*100000000
         # lex_id = dictionary_form_dictionary_number
 
 
