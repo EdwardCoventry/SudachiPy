@@ -17,6 +17,7 @@ from typing import List
 
 from .lexicon import Lexicon
 
+CUSTOM_OFFSET = 10**8
 
 class LexiconSet(Lexicon):
 
@@ -95,17 +96,21 @@ class LexiconSet(Lexicon):
         winfo.b_unit_split = self.convert_split(winfo.b_unit_split, dic_id)
         winfo.word_structure = self.convert_split(winfo.word_structure, dic_id)
 
-        if winfo.lex_id == 2:
+        if winfo.lex_id == 0:
+            winfo.lex_type = 'sudachi'
+        elif winfo.lex_id == 1:
+            winfo.lex_type = 'custom'
+        elif winfo.lex_id == 2:
             winfo.lex_type = 'character'
         elif winfo.lex_id == 3:
             winfo.lex_type = 'animetitle'
         elif winfo.lex_id == 4:
             winfo.lex_type = 'anime'
-        # else:
-        #     raise Exception(f"lex id {winfo.lex_id} not supported")
+        else:
+            raise Exception(f"lex id {winfo.lex_id} not supported")
 
-        if winfo.lex_id == 1 and winfo.word_id < 10**9:
-            winfo.word_id += 10**9
+        if winfo.lex_id == 1 and winfo.word_id < CUSTOM_OFFSET:
+            winfo.word_id += CUSTOM_OFFSET
 
         return winfo
 

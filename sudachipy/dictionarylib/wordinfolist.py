@@ -16,6 +16,7 @@ import struct
 
 from .wordinfo import WordInfo
 
+CUSTOM_OFFSET = 10**8
 
 class WordInfoList(object):
     def __init__(self, bytes_, offset, word_size, has_synonym_gid):
@@ -46,7 +47,7 @@ class WordInfoList(object):
         word_structure = self.buffer_to_int_array()
 
         if word_id > 0:
-            lex_id, word_id = divmod(word_id, 100000000)
+            lex_id, word_id = divmod(word_id, CUSTOM_OFFSET)
         else:
             lex_id = 0
 
@@ -67,7 +68,7 @@ class WordInfoList(object):
             synonym_gids = self.buffer_to_int_array()
 
         if dictionary_form_word_id > 0:
-            dictionary_form_dictionary_number, dictionary_form_word_id = divmod(dictionary_form_word_id, 100000000)
+            dictionary_form_dictionary_number, dictionary_form_word_id = divmod(dictionary_form_word_id, CUSTOM_OFFSET)
         else:
             dictionary_form_dictionary_number = 0
 
@@ -101,12 +102,14 @@ class WordInfoList(object):
 
         self.bytes.seek(orig_pos)
 
-        dictionary_form_word_id = dictionary_form_word_id + dictionary_form_dictionary_number*100000000
+        dictionary_form_word_id = dictionary_form_word_id + dictionary_form_dictionary_number*CUSTOM_OFFSET
         # lex_id = dictionary_form_dictionary_number
 
 
-        if lex_id == 0 or lex_id == 1:
+        if lex_id == 0:
             lex_type = 'sudachi'
+        elif lex_id == 1:
+            lex_type = 'custom'
         elif lex_id == 2:
             lex_type = 'character'
         elif lex_id == 3:
@@ -114,8 +117,8 @@ class WordInfoList(object):
         elif lex_id == 4:
             lex_type = 'anime'  # todo
 
-        if lex_id == 1 and word_id < 10**9:
-            word_id += 10**9
+        if lex_id == 1 and word_id < CUSTOM_OFFSET:
+            word_id += CUSTOM_OFFSET
 
         word_info = WordInfo(surface, head_word_length, pos_id, normalized_form, dictionary_form_word_id,
                         dictionary_form, reading_form, a_unit_split, b_unit_split, word_structure, synonym_gids,

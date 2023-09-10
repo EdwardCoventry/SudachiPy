@@ -366,13 +366,6 @@ class DictionaryBuilder(object):
                 return i
         return -1
 
-    # def check_wordid(self, wid):
-    #     #  allowing using up to 1000 entries
-    #     if 100001000 > wid >= 100000000:
-    #         pass
-    #     elif wid < 0 or wid >= len(self.entries):
-    #         raise ValueError('invalid word ID')
-
     def check_wordid(self, wid):
         if wid < 0 or wid >= len(self.entries):
             raise ValueError('invalid word ID')
