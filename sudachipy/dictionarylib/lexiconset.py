@@ -107,7 +107,7 @@ class LexiconSet(Lexicon):
         elif winfo.lex_id == 4:
             winfo.lex_type = 'anime'
         elif winfo.lex_id == 5:
-            winfo.lex_type = 'oov_episode'
+            winfo.lex_type = 'episode'
         else:
             raise Exception(f"lex id {winfo.lex_id} not supported")
 
