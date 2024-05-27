@@ -113,9 +113,11 @@ class WordInfoList(object):
         elif lex_id == 2:
             lex_type = 'character'
         elif lex_id == 3:
-            lex_type = 'animetitle'
+            lex_type = 'anime title'
         elif lex_id == 4:
-            lex_type = 'anime'  # todo
+            lex_type = 'anime'
+        elif lex_id == 5:
+            lex_type = 'episode'
 
         if lex_id == 1 and word_id < CUSTOM_OFFSET:
             word_id += CUSTOM_OFFSET
