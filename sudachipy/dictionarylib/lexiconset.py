@@ -103,9 +103,9 @@ class LexiconSet(Lexicon):
         elif winfo.lex_id == 2:
             winfo.lex_type = 'character'
         elif winfo.lex_id == 3:
-            winfo.lex_type = 'animetitle'
+            winfo.lex_type = 'anime title'
         elif winfo.lex_id == 4:
-            winfo.lex_type = 'anime_title'
+            winfo.lex_type = 'anime'
         elif winfo.lex_id == 5:
             winfo.lex_type = 'episode'
         else:
