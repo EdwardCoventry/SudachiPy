@@ -113,7 +113,7 @@ class WordInfoList(object):
         elif lex_id == 2:
             lex_type = 'character'
         elif lex_id == 3:
-            lex_type = 'anime title'
+            lex_type = 'anime_title'
         elif lex_id == 4:
             lex_type = 'anime'
         elif lex_id == 5:
