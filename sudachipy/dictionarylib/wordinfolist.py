@@ -105,17 +105,21 @@ class WordInfoList(object):
         dictionary_form_word_id = dictionary_form_word_id + dictionary_form_dictionary_number*CUSTOM_OFFSET
         # lex_id = dictionary_form_dictionary_number
 
-
+        #  note that these get overriden upon geting token
         if lex_id == 0:
             lex_type = 'sudachi'
         elif lex_id == 1:
             lex_type = 'custom'
         elif lex_id == 2:
-            lex_type = 'character'
+            lex_type = 'expanded_pos'
         elif lex_id == 3:
-            lex_type = 'animetitle'
+            lex_type = 'character'
         elif lex_id == 4:
-            lex_type = 'anime'  # todo
+            lex_type = 'anime_title'
+        elif lex_id == 5:
+            lex_type = 'anime'
+        elif lex_id == 6:
+            lex_type = 'episode'
 
         if lex_id == 1 and word_id < CUSTOM_OFFSET:
             word_id += CUSTOM_OFFSET
