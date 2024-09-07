@@ -101,14 +101,12 @@ class LexiconSet(Lexicon):
         elif winfo.lex_id == 1:
             winfo.lex_type = 'custom'
         elif winfo.lex_id == 2:
-            winfo.lex_type = 'expanded_pos'
-        elif winfo.lex_id == 3:
             winfo.lex_type = 'character'
-        elif winfo.lex_id == 4:
+        elif winfo.lex_id == 3:
             winfo.lex_type = 'anime_title'
-        elif winfo.lex_id == 5:
+        elif winfo.lex_id == 4:
             winfo.lex_type = 'anime'
-        elif winfo.lex_id == 6:
+        elif winfo.lex_id == 5:
             winfo.lex_type = 'episode'
         else:
             raise Exception(f"lex id {winfo.lex_id} not supported")
