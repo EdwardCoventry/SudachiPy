@@ -80,8 +80,8 @@ class DoubleArrayLexicon(Lexicon):
     def get_cost(self, word_id: int) -> int:
         return self.word_params.get_cost(word_id)
 
-    def get_word_info(self, word_id: int, general_lex=None, _offset=None) -> 'WordInfo':  # noqa: F821
-        return self.word_infos.get_word_info(word_id, general_lex, _offset=_offset)
+    def get_word_info(self, word_id: int, lexes=None, _offset=None) -> 'WordInfo':  # noqa: F821
+        return self.word_infos.get_word_info(word_id, lexes, _offset=_offset)
 
     def size(self) -> int:
         return self.word_params.size

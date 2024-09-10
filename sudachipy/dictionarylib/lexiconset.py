@@ -87,7 +87,6 @@ class LexiconSet(Lexicon):
 
         winfo = self.lexicons[dic_id].get_word_info(self.get_word_id1(word_id), general_lex=general_lex)
         assert hasattr(winfo, 'word_id')
-        # winfo.word_id = word_id
         winfo.lex_id = dic_id
         pos_id = winfo.pos_id
         if dic_id > 0 and pos_id >= self.pos_offsets[1]:  # user defined part-of-speech
@@ -95,23 +94,6 @@ class LexiconSet(Lexicon):
         winfo.a_unit_split = self.convert_split(winfo.a_unit_split, dic_id)
         winfo.b_unit_split = self.convert_split(winfo.b_unit_split, dic_id)
         winfo.word_structure = self.convert_split(winfo.word_structure, dic_id)
-
-        if winfo.lex_id == 0:
-            winfo.lex_type = 'sudachi'
-        elif winfo.lex_id == 1:
-            winfo.lex_type = 'custom'
-        elif winfo.lex_id == 2:
-            winfo.lex_type = 'expanded_pos'
-        elif winfo.lex_id == 3:
-            winfo.lex_type = 'character'
-        elif winfo.lex_id == 4:
-            winfo.lex_type = 'anime_title'
-        elif winfo.lex_id == 5:
-            winfo.lex_type = 'anime'
-        elif winfo.lex_id == 6:
-            winfo.lex_type = 'episode'
-        else:
-            raise Exception(f"lex id {winfo.lex_id} not supported")
 
         if winfo.lex_id == 1 and winfo.word_id < CUSTOM_OFFSET:
             winfo.word_id += CUSTOM_OFFSET

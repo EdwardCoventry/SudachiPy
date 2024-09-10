@@ -16,7 +16,8 @@ import struct
 
 from .wordinfo import WordInfo
 
-CUSTOM_OFFSET = 10**8
+CUSTOM_OFFSET = 10 ** 8
+
 
 class WordInfoList(object):
     def __init__(self, bytes_, offset, word_size, has_synonym_gid):
@@ -25,7 +26,7 @@ class WordInfoList(object):
         self._word_size = word_size
         self.has_synonym_gid = has_synonym_gid
 
-    def get_word_info(self, word_id, general_lex, _offset=None):
+    def get_word_info(self, word_id, lexes, _offset=None):
         orig_pos = self.bytes.tell()
         index = self.word_id_to_offset(word_id, _offset)
         self.bytes.seek(index)
@@ -51,36 +52,26 @@ class WordInfoList(object):
         else:
             lex_id = 0
 
-        """
-        edits
-        #  get word info
-        """
+        # edits
         self.word_id_int = word_id
         self.word_id = word_id
-        # self.dictionary_number = self.get_dictionary_id(word_id)
-
-        """
-        /edits
-        """
 
         synonym_gids = []
         if self.has_synonym_gid:
             synonym_gids = self.buffer_to_int_array()
 
-        if dictionary_form_word_id > 0:
-            dictionary_form_dictionary_number, dictionary_form_word_id = divmod(dictionary_form_word_id, CUSTOM_OFFSET)
+        if dictionary_form_word_id == -1:
+            dictionary_form_lex_id = 0
         else:
-            dictionary_form_dictionary_number = 0
+            dictionary_form_lex_id, dictionary_form_word_id = divmod(dictionary_form_word_id, CUSTOM_OFFSET)
 
         dictionary_form = surface
         if dictionary_form_word_id >= 0 and dictionary_form_word_id != word_id:
 
-            if dictionary_form_dictionary_number >= 2:
-                raise Exception("cant get dictionary forms from lex 2")
-            elif dictionary_form_dictionary_number >= 1:
-                wi = self.get_word_info(dictionary_form_word_id, general_lex)
+            if dictionary_form_lex_id == 0:
+                wi = self.get_word_info(dictionary_form_word_id, lexes)
             else:
-                if general_lex is None:
+                if lexes is None:
                     try:
                         wi = self.get_word_info(dictionary_form_word_id, self)
                     except ValueError as e:
@@ -92,45 +83,20 @@ class WordInfoList(object):
                     then we need a reference to the general user dict
                     in order to get the right token for dictionary_form_word_id
                     """
-                    wi = general_lex.get_word_info(dictionary_form_word_id, general_lex)
+                    wi = lexes[dictionary_form_lex_id].get_word_info(dictionary_form_word_id, lexes)
 
-            # try:
-            #     wi = self.get_word_info(dictionary_form_word_id)
-            # except RecursionError as re:
-            #     raise re
             dictionary_form = wi.surface
 
         self.bytes.seek(orig_pos)
 
-        dictionary_form_word_id = dictionary_form_word_id + dictionary_form_dictionary_number*CUSTOM_OFFSET
-        # lex_id = dictionary_form_dictionary_number
+        dictionary_form_word_id = dictionary_form_word_id + dictionary_form_lex_id * CUSTOM_OFFSET
 
-
-        if lex_id == 0:
-            lex_type = 'sudachi'
-        elif lex_id == 1:
-            lex_type = 'custom'
-        elif lex_id == 2:
-            lex_type = 'expanded_pos'
-        elif lex_id == 3:
-            lex_type = 'character'
-        elif lex_id == 4:
-            lex_type = 'anime_title'
-        elif lex_id == 5:
-            lex_type = 'anime'
-        elif lex_id == 6:
-            lex_type = 'episode'
-
-        if lex_id == 1 and word_id < CUSTOM_OFFSET:
-            word_id += CUSTOM_OFFSET
+        if lex_id >= 1 and word_id < CUSTOM_OFFSET ** dictionary_form_lex_id:
+            word_id += CUSTOM_OFFSET ** dictionary_form_lex_id
 
         word_info = WordInfo(surface, head_word_length, pos_id, normalized_form, dictionary_form_word_id,
-                        dictionary_form, reading_form, a_unit_split, b_unit_split, word_structure, synonym_gids,
-                             word_id=word_id, lex_id=lex_id, lex_type=lex_type, dictionary_form_lex_id=dictionary_form_dictionary_number)
-
-        # word_info.word_id = self.word_id
-        # word_info.word_id_int = self.word_id_int
-        # word_info.word_id = self.word_id_int
+                             dictionary_form, reading_form, a_unit_split, b_unit_split, word_structure, synonym_gids,
+                             word_id=word_id, lex_id=lex_id, dictionary_form_lex_id=dictionary_form_lex_id)
 
         return word_info
 
