@@ -77,12 +77,10 @@ class WordInfoList(object):
                     except ValueError as e:
                         raise e
                 else:
-                    """
-                    if this function get_word_info is being called from a user dictionary wordinfolist
-                    but the dictionary version is from the general user dict
-                    then we need a reference to the general user dict
-                    in order to get the right token for dictionary_form_word_id
-                    """
+                    # if this function get_word_info is being called from a user dictionary wordinfolist
+                    # but the dictionary version is from the general user dict
+                    # then we need a reference to the general user dict
+                    # in order to get the right token for dictionary_form_word_id
                     wi = lexes[dictionary_form_lex_id].get_word_info(dictionary_form_word_id, lexes)
 
             dictionary_form = wi.surface
