@@ -55,4 +55,6 @@ class UserDictionaryBuilder(DictionaryBuilder):
         if wid >= (1 << 28):
             super().check_wordid(wid & ((1 << 28) - 1))
         elif wid < 0 or wid >= self.system_lexicon.size():
-            raise ValueError('invalid word id')
+            lex_size = self.system_lexicon.size()
+            warnings.warn(f'word id out of range {lex_size}... ignoring')
+            # raise ValueError('invalid word id')
