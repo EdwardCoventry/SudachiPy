@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from .dictionarybuilder import DictionaryBuilder
+import warnings
 
 
 class UserDictionaryBuilder(DictionaryBuilder):
@@ -54,7 +55,7 @@ class UserDictionaryBuilder(DictionaryBuilder):
     def check_wordid(self, wid):
         if wid >= (1 << 28):
             super().check_wordid(wid & ((1 << 28) - 1))
-        elif wid < 0 or wid >= self.system_lexicon.size():
-            lex_size = self.system_lexicon.size()
+        elif wid < 0:
+            raise ValueError('invalid word id')
+        elif wid >= (lex_size := self.system_lexicon.size()):
             warnings.warn(f'word id out of range {lex_size}... ignoring')
-            # raise ValueError('invalid word id')
