@@ -76,16 +76,12 @@ class LexiconSet(Lexicon):
     def get_word_info(self, word_id: int) -> 'WordInfo':  # noqa: F821
         dic_id = self.get_dictionary_id(word_id)
 
-        if dic_id > 0:
-            """
-            if this word is from a custom dictionary then we need a reference to the general dictionary
-            in case the word's dictionary version is from the general dictionary
-            """
-            general_lex = self.lexicons[0]
-        else:
-            general_lex = None
+        """
+        if this word is from a custom dictionary then we need a reference to the general dictionary
+        in case the word's dictionary version is from the general dictionary
+        """
 
-        winfo = self.lexicons[dic_id].get_word_info(self.get_word_id1(word_id), general_lex=general_lex)
+        winfo = self.lexicons[dic_id].get_word_info(self.get_word_id1(word_id), lexes=self.lexicons)
         assert hasattr(winfo, 'word_id')
         winfo.lex_id = dic_id
         pos_id = winfo.pos_id

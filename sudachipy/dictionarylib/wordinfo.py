@@ -26,7 +26,6 @@ class WordInfo:
                  b_unit_split,
                  word_structure,
                  synonym_group_ids,
-                 lex_type=None,
                  lex_id=0,
                  word_id=None,
                  dictionary_form_lex_id=0):
@@ -43,7 +42,6 @@ class WordInfo:
         self.synonym_group_ids = synonym_group_ids
         self.word_id = word_id
         self.lex_id = lex_id
-        self.lex_type = lex_type or 'oov'
         self.dictionary_form_lex_id = dictionary_form_lex_id
 
     def length(self):
