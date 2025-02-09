@@ -34,6 +34,7 @@ class DictionaryBuilder(object):
     __ARRAY_MAX_LENGTH = __BYTE_MAX_VALUE  # max value of byte in Java
     __STRING_MAX_LENGTH = 32767  # max value of short in Java
     is_user_dictionary = False
+    __logger_initialized = False
 
     class WordEntry:
         headword = None
@@ -61,13 +62,14 @@ class DictionaryBuilder(object):
     @staticmethod
     def __default_logger():
         logger = getLogger(__name__)
-        if not logger.handlers:
+        if not DictionaryBuilder.__logger_initialized:
             handler = StreamHandler()
             handler.terminator = ""
             handler.setLevel(DEBUG)
             logger.setLevel(DEBUG)
             logger.addHandler(handler)
             logger.propagate = False
+            DictionaryBuilder.__logger_initialized = True  # Mark as initialized
         return logger
 
     def __init__(self, *, logger=None):
