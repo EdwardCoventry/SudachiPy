@@ -60,13 +60,14 @@ class DictionaryBuilder(object):
 
     @staticmethod
     def __default_logger():
-        handler = StreamHandler()
-        handler.terminator = ""
-        handler.setLevel(DEBUG)
         logger = getLogger(__name__)
-        logger.setLevel(DEBUG)
-        logger.addHandler(handler)
-        logger.propagate = False
+        if not logger.handlers:
+            handler = StreamHandler()
+            handler.terminator = ""
+            handler.setLevel(DEBUG)
+            logger.setLevel(DEBUG)
+            logger.addHandler(handler)
+            logger.propagate = False
         return logger
 
     def __init__(self, *, logger=None):
